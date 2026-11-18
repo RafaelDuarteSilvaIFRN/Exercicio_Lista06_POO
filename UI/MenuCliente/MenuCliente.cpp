@@ -23,11 +23,15 @@ void MenuCliente::abrirArquivo(){
 }
 
 void MenuCliente::cliente_Listar(){
-    vector<Cliente> clientes = clientedao.Listar();
 
+    vector<Cliente> clientes = clientedao.Listar();
+    
     if(clientes.empty()){
        cout << "Lista vazia!\n"; 
+       return;
     }
+
+    
 
     for(const Cliente& c: clientes){
             cout << c.ToString() << "\n\n";
@@ -35,7 +39,6 @@ void MenuCliente::cliente_Listar(){
 }
 
 void MenuCliente::cliente_ListarId(){
-
     int id;
 
     cout << "Digite o Id do cliente: ";

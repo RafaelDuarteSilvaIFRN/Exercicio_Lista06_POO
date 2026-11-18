@@ -11,10 +11,12 @@ void VendaDAO::Inserir(Venda obj){
 }
 
 vector<Venda> VendaDAO::Listar(){
+    Abrir();
     return objetos;
 }
 
 Venda VendaDAO::Listar_Id(int id){
+    Abrir();
     for(const Venda& c: objetos){
         if(c.getId() == id){
             return c; 
@@ -57,7 +59,10 @@ void VendaDAO::Abrir(){
         return;
 }
 
-json dados = json::parse(arquivo);
+json dados;
+arquivo >> dados;
+arquivo.close();
+
 objetos.clear();
 
 for(const auto& item: dados){

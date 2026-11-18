@@ -11,10 +11,12 @@ void ClienteDAO::Inserir(Cliente obj){
 }
 
 vector<Cliente> ClienteDAO::Listar(){
+    Abrir();
     return objetos;
 }
 
 Cliente ClienteDAO::Listar_Id(int id){
+    Abrir();
     for(const Cliente& c: objetos){
         if(c.getId() == id){
             return c; 
@@ -52,16 +54,16 @@ void ClienteDAO::Excluir(int id){
 void ClienteDAO::Abrir(){
         ifstream arquivo("clientes.json");
 
-        if(!arquivo.is_open() || arquivo.peek == ifstream::traits_type::eof()){
+        if(!arquivo.is_open()){
             objetos.clear();
             arquivo.close();
             return;
     }
 
-    json j;
-    arquivo >> j;
-
-    json dados = json::parse(arquivo);
+    json dados;
+    arquivo >> dados;
+    arquivo.close();
+    
     objetos.clear();
 
     for(const auto& item: dados){

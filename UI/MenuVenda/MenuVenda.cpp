@@ -28,9 +28,11 @@ void MenuVenda::venda_Inserir(){
 
     cout << "Digite o Id da Venda: ";
     cin >> id;
+    cin.ignore();
 
     cout << "Digite o Id do cliente da venda: ";
     cin >> id_cliente;
+    cin.ignore();
 
     try{
 
@@ -52,12 +54,12 @@ void MenuVenda::venda_Inserir(){
 void MenuVenda::venda_Listar(){
        vector<Venda> vendas = vendadao.Listar();
 
-    if(vendas.empty()){
-        cout << "Nenhuma venda cadastrada!\n";
-        return;
-    }   
-
-    for(const Venda& v: vendas){
+       if(vendas.empty()){
+           cout << "Nenhuma venda cadastrada!\n";
+           return;
+        }   
+        
+        for(const Venda& v: vendas){
         string nomeCliente = "Cliente não encontrado!";
 
         try{
@@ -83,10 +85,12 @@ void MenuVenda::venda_Atualizar(){
 
     cout << "Informe o Id da venda: ";
     cin >> id;
+    cin.ignore();
 
     cout << "\nAtualiza o Id do Cliente: ";
     cin >> id_cliente;
-    
+    cin.ignore();
+
     cout << "\nAtualiza o preço: ";
     cin >> total;
 
@@ -106,6 +110,7 @@ void MenuVenda::venda_Excluir(){
     int id;
     cout << "Digite o Id da venda que deseja excluir: ";
     cin >> id;
+    cin.ignore();
 
     Venda obj = vendadao.Listar_Id(id);
     vendadao.Excluir(obj.getId());

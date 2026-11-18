@@ -2,6 +2,7 @@
 #include "UI.hpp"
 #include "MenuCliente/MenuCliente.hpp"
 #include "MenuVenda/MenuVenda.hpp"
+#include "MenuCategoria/MenuCategoria.hpp"
 #include <string>
 
 using namespace std;
@@ -11,6 +12,7 @@ int UI::Menu(){
     cout << "\nMenu Principal\n";
     cout << "1 - Gerenciar Clientes\n";
     cout << "2 - Gerenciar Vendas\n";
+    cout << "3 - Gerenciar Categorias\n";
     cout << "0 - Sair\n";
     cout << "Escolha uma opcao: ";
 
@@ -78,6 +80,32 @@ void UI::Main(){
                     default: cout << "Opção Invalida!\n";
                   }
                 } while(opVenda != 0);
+                break;
+            }
+
+            case 3: {
+
+            MenuCategoria menuCategoria;    
+            menuCategoria.abrirArquivo();
+
+            int opCategoria;
+
+            do{
+
+                opCategoria = menuCategoria.menuOpcoesCategoria();
+
+                switch(opCategoria){
+
+                    case 1: menuCategoria.categoria_Inserir(); break;
+                    case 2: menuCategoria.categoria_Listar(); break;
+                    case 3: menuCategoria.categoria_ListarId(); break;
+                    case 4: menuCategoria.categoria_Atualizar(); break;
+                    case 5: menuCategoria.categoria_Excluir(); break;
+                    case 0: break;
+                    
+                    default: cout << "Opção Invalida!\n";
+                  }
+                } while(opCategoria != 0);
                 break;
             }
 
