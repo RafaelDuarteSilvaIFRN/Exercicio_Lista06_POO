@@ -1,5 +1,6 @@
 #include "MenuVenda.hpp"
-#include "../../Cliente/Cliente.hpp"
+#include "../../models/Cliente/Cliente.hpp"
+#include "../../service/ServiceCliente/serviceCliente.hpp"
 
 using namespace std;
 
@@ -8,8 +9,9 @@ int MenuVenda::menuVendaOpções(){
     cout << "\nMenu de vendas\n";
     cout << "1 - Inserir vendas\n";
     cout << "2 - Listar vendas\n";
-    cout << "3 - Atualizar vendas\n";
-    cout << "4 - Excluir vendas\n";
+    cout << "3 - buscar venda por id\n";
+    cout << "4 - Atualizar vendas\n";
+    cout << "5 - Excluir vendas\n";
     cout << "0 - Voltar para o menu principal\n";
     cout << "Escolha uma opcao: ";
 
@@ -17,10 +19,6 @@ int MenuVenda::menuVendaOpções(){
     cin >> opcao;
 
     return opcao;
-}
-
-void MenuVenda::abrirArquivo(){
-     vendadao.Abrir();
 }
 
 void MenuVenda::venda_Inserir(){
@@ -35,16 +33,7 @@ void MenuVenda::venda_Inserir(){
     cin.ignore();
 
     try{
-
-        clientedao.Abrir();
-        clientedao.Listar_Id(id_cliente);
-
-        Venda v(id);
-
-        v.setIdCliente(id_cliente);
-        vendadao.Inserir(v);
-        vendadao.Salvar();
-
+        ServiceVenda::venda_inserir(id, id_cliente);
         cout << "Venda cadastrado com sucesso!\n";
     } catch(const exception& e){
         cout << "Error ao cadastrar venda: " << e.what() << endl;
@@ -52,57 +41,92 @@ void MenuVenda::venda_Inserir(){
 }
 
 void MenuVenda::venda_Listar(){
-       vector<Venda> vendas = vendadao.Listar();
+    try{
 
-       if(vendas.empty()){
-           cout << "Nenhuma venda cadastrada!\n";
+        vector<Venda> vendas = ServiceVenda::venda_Listar();
+        
+        if(vendas.empty()){
+           cout << "Lista de vendas vazia!\n"; 
            return;
-        }   
-        
-        for(const Venda& v: vendas){
-        string nomeCliente = "Cliente não encontrado!";
-
-        try{
-
-            Cliente c = clientedao.Listar_Id(v.getIdCliente());
-            nomeCliente = c.getNome();
-
-        } catch(const exception& e){
-           cout << "Cliente não encontrado! " << e.what() << endl;
         }
-        
-        cout << "\nVenda id: " << v.getId() << "\n";
-        cout << "Cliente: " << nomeCliente << "\n";
-        cout << "Id do cliente: " << v.getIdCliente() << "\n";
-        cout << "Total: R$ " << v.getTotal() << "\n";
-    
+
+        for(const Venda& v: vendas){
+            cout << v.ToString() << "\n";
+
+            try{
+                Cliente c = ServiceCliente::cliente_listar_id(v.getIdCliente());
+                cout << "Cliente: " << c.getNome() << endl;
+
+            }catch(const exception& e){
+                cout << "Cliente não encontrado! " << e.what() << endl;
+            }
+
+        } 
+
+    } catch(const exception& e){
+        cout << "Erro ao listar Vendas: " << e.what() << endl;  
+    }
+}
+
+void MenuVenda::venda_ListarId(){
+
+    int id;
+
+    cout << "Digite o Id da venda: ";
+    cin >> id;
+
+    try{
+        Venda c = ServiceVenda::venda_listar_id(id);
+        cout << "\nVenda encontrada\n";
+        cout << c.ToString() << "\n";
+    } catch(const exception& e){
+        cout << "Erro ao buscar Venda: " << e.what() << endl;
     }
 }
 
 void MenuVenda::venda_Atualizar(){
-    int id, id_cliente;
+    int id, id_cliente, escolher_item;
     double total;
 
     cout << "Informe o Id da venda: ";
     cin >> id;
     cin.ignore();
 
-    cout << "\nAtualiza o Id do Cliente: ";
-    cin >> id_cliente;
-    cin.ignore();
+    try {
+        Venda v = ServiceVenda::venda_listar_id(id);
+        id_cliente = v.getIdCliente();
+        total = v.getTotal();
 
-    cout << "\nAtualiza o preço: ";
-    cin >> total;
+        cout << "Selecione qual item vc deseja atualizar:\n";
+        cout << "[1] Id do Cliente  [2] Total\n";
 
-    Venda v(id);
+        cin >> escolher_item;
+        cin.ignore();
 
-    v.setIdCliente(id_cliente);
-    v.setTotal(total);
+        switch (escolher_item) {
+            case 1: {
+                cout << "\nAtualiza o Id do Cliente: ";
+                cin >> id_cliente;
+                cin.ignore();
+                break;
+            }
+            case 2: {
+                cout << "\nAtualiza o preço/total: ";
+                cin >> total;
+                cin.ignore();
+                break;
+            }
+            default: {
+                cout << "Opção invalida!\n";
+                return;
+            }
+        }
 
-    vendadao.Atualizar(v);
-    vendadao.Salvar();
-
-    cout << "\nVenda atualizado com sucesso!\n";
+           ServiceVenda::venda_atualizar(id, id_cliente, total);
+           cout << "Venda atualizada com sucesso!\n";
+    } catch (const exception& e) {
+        cout << "Erro ao atualizar venda: " << e.what() << endl;
+    }
 }
 
 
@@ -112,9 +136,10 @@ void MenuVenda::venda_Excluir(){
     cin >> id;
     cin.ignore();
 
-    Venda obj = vendadao.Listar_Id(id);
-    vendadao.Excluir(obj.getId());
-    vendadao.Salvar();
-
-    cout << "Venda excluido com sucesso!\n";
+    try{
+        ServiceVenda::venda_excluir(id);
+        cout << "Venda excluida com sucesso!\n";
+    } catch(const exception& e){
+        cout << "Erro ao excluir venda: " << e.what() << endl;
+    }
 }

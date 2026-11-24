@@ -18,23 +18,21 @@ int MenuCliente::menuOpcoesCliente(){
     return opcao;
 }
 
-void MenuCliente::abrirArquivo(){
-     clientedao.Abrir();
-}
-
 void MenuCliente::cliente_Listar(){
 
-    vector<Cliente> clientes = clientedao.Listar();
-    
-    if(clientes.empty()){
-       cout << "Lista vazia!\n"; 
-       return;
-    }
+    try{
+        vector<Cliente> clientes = ServiceCliente::cliente_listar();
+        
+        if(clientes.empty()){
+        cout << "Lista vazia!\n"; 
+        return;
+        }
 
-    
-
-    for(const Cliente& c: clientes){
-            cout << c.ToString() << "\n\n";
+        for(const Cliente& c: clientes){
+                cout << c.ToString() << "\n\n";
+        }
+    } catch(const exception& e){
+        cout << "Erro ao listar clientes: " << e.what() << endl;
     }
 }
 
@@ -44,9 +42,13 @@ void MenuCliente::cliente_ListarId(){
     cout << "Digite o Id do cliente: ";
     cin >> id;
 
-    Cliente c = clientedao.Listar_Id(id);
-    cout << "\nCliente encontrado\n";
-    cout << c.ToString() << "\n";
+    try{
+        Cliente c = ServiceCliente::cliente_listar_id(id);
+        cout << "\nCliente encontrado!\n";
+        cout << c.ToString() << endl;
+    } catch(const exception& e){
+        cout << "Erro ao buscar cliente: " << e.what() << endl;
+    }
 
 }
 
@@ -67,36 +69,67 @@ void MenuCliente::cliente_Inserir(){
     cout << "\nDigite o telefone: ";
     getline(cin, fone);
 
-    Cliente c(id, nome, email, fone);
-    clientedao.Inserir(c);
-    clientedao.Salvar();
-
-    cout << "Cliente cadastrado com sucesso!\n";
+    try{
+        ServiceCliente::cliente_inserir(id, nome, email, fone);
+        cout << "Cliente cadastrado com sucesso!\n";
+    } catch(const exception& e){
+        cout << "Erro ao cadastrar cliente: " << e.what() << endl;
+    }
 }
 
 void MenuCliente::cliente_Atualizar(){
-    int id;
+    int id, escolher_item;
     string nome, email, fone;
 
-    cout << "Atualiza o Id: ";
+    cout << "Informe o Id do cliente: ";
     cin >> id;
     cin.ignore();
 
-    cout << "\nAtualiza o seu nome: ";
-    getline(cin, nome);
+    try{
+        Cliente c = ServiceCliente::cliente_listar_id(id);
+        nome = c.getNome();
+        email = c.getEmail();
+        fone = c.getFone();
 
-    cout << "\nAtualiza o seu email: ";
-    getline(cin, email);
-    
-    cout << "\nAtualiza o seu telefone: ";
-    getline(cin, fone);
 
-    Cliente c(id, nome, email, fone);
+        cout << "Selecione qual item vc deseja atualizar:\n";
+        cout << "[1] Nome  [2] Email  [3] Telefone\n";
+        cin >> escolher_item;
+        switch(escolher_item){
 
-    clientedao.Atualizar(c);
-    clientedao.Salvar();
+            case 1 : {
+                    cout << "\nInforme o nome que vc deseja atualizar: ";
+                    getline(cin, nome);
+                    cin.ignore();
+                    break;
+            }
 
-    cout << "\nCliente atualizado com sucesso!\n";
+            case 2: {
+                cout << "Informe o email que vc deseja atualizar: ";
+                cin >> email;
+                cin.ignore();
+                break;
+            }
+
+            case 3: {
+                cout << "\nInforme o telefone que vc deseja atualizar: ";
+                cin >> fone;
+                cin.ignore();
+                break;
+            }
+
+            default :{
+                cout << "Opção invalida!\n";
+                return;
+            }
+
+        }
+
+        ServiceCliente::cliente_atualizar(id, nome, email, fone);
+        cout << "\nCliente atualizado com sucesso!\n";
+    } catch(const exception& e){
+        cout << "Erro ao atualizar cliente: " << e.what() << endl;
+    }
 }
 
 void MenuCliente::cliente_Excluir(){
@@ -104,10 +137,13 @@ void MenuCliente::cliente_Excluir(){
     int id;
     cout << "Digite o Id do cliente que deseja excluir: ";
     cin >> id;
+    cin.ignore();
+    
+    try{
+        ServiceCliente::cliente_excluir(id);
+        cout << "Cliente excluido com sucesso!\n";
+    } catch(const exception& e){
+        cout << "Erro ao excluir cliente: " << e.what() << endl;
+    }
 
-    Cliente obj = clientedao.Listar_Id(id);
-    clientedao.Excluir(obj.getId());
-    clientedao.Salvar();
-
-    cout << "Cliente excluido com sucesso!\n";
 }

@@ -4,17 +4,12 @@
 #include <iostream>
 #include <string>
 
-#include "../../ClienteDAO/ClienteDAO.hpp"
+#include "../../service/ServiceCliente/serviceCliente.hpp"
 using namespace std;
 
 class MenuCliente{
-
-    private:
-        ClienteDAO clientedao;
-
     public:
-
-        void abrirArquivo();
+    
         int menuOpcoesCliente();
         void cliente_Listar();
         void cliente_ListarId();

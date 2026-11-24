@@ -1,14 +1,17 @@
 #ifndef UI_HPP 
 #define UI_HPP 
 
-#include "../ClienteDAO/ClienteDAO.hpp"
-#include "../VendaDAO/VendaDAO.hpp"
-
+#include "../models/ClienteDAO/ClienteDAO.hpp"
+#include "../models/VendaDAO/VendaDAO.hpp"
+#include "../models/ProdutoDAO/produtoDAO.hpp"
+#include "../models/VendaItemDAO/vendaItemDAO.hpp"
 class UI{
 
     private:
         ClienteDAO clientedao;
         VendaDAO vendadao;
+        ProdutoDAO produtoDAO;
+        VendaItemDAO vendaItemDAO;
 
     public:
 

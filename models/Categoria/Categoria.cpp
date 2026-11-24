@@ -35,7 +35,8 @@ string Categoria::getDescricao() const{
 
 string Categoria::ToString() const{
 
-    return "Id: " + to_string(id) + "\nDescrição: " + descricao;
+    return "\nId: " + to_string(id) + 
+            "\nDescrição: " + descricao + "\n";
 
 }
 

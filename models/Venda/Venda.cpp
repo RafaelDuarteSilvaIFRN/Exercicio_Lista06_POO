@@ -1,4 +1,5 @@
 #include <stdexcept>
+
 #include "Venda.hpp"
 
 Venda::Venda(int id){
@@ -21,9 +22,17 @@ int Venda::getId() const{
     return id;
 }
 
+void Venda::setCarrinho(bool carrinho){
+     this -> carrinho = carrinho;
+}
+
+bool Venda::getCarrinho()const{
+    return carrinho;
+}
+
 void Venda::setTotal(double total){
 
-    if(total > 0.0){
+    if(total >= 0.0){
         this -> total = total;
     } else{
         throw invalid_argument("Preço invalido!");
@@ -39,7 +48,7 @@ void Venda::setIdCliente(int id_cliente){
         if(id_cliente > 0){
           this -> id_cliente = id_cliente;
         } else{
-           throw invalid_argument("Id invalido!");  
+           throw invalid_argument("Id de cliente invalido!");  
         }
 }
 
@@ -51,8 +60,13 @@ string Venda::ToString() const{
 
     auto time_data = chrono::system_clock::to_time_t(data);
 
-    return "Id: " + to_string(id) +
-            "\nData: " + ctime(&time_data);
+    ostringstream vendaString;
+    vendaString << "Venda id: " << id << "\n"
+        << "Id do cliente: " << id_cliente << "\n"
+        << "Data: " << time_data << "\n"
+        << "Total: R$ " << fixed << setprecision(2) << total << "\n";
+
+    return vendaString.str();
 
 }
 

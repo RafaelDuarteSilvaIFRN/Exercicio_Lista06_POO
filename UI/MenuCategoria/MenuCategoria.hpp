@@ -4,17 +4,13 @@
 #include <iostream>
 #include <string>
 
-#include "../../CategoriaDAO/CategoriaDAO.hpp"
+#include "../../service/ServiceCategoria/serviceCategoria.hpp"
 using namespace std;
 
 class MenuCategoria{
 
-    private:
-        CategoriaDAO categoriadao;
-
     public:
 
-        void abrirArquivo();
         int menuOpcoesCategoria();
         void categoria_Listar();
         void categoria_ListarId();

@@ -7,7 +7,16 @@
 using json = nlohmann::json;
 
 void ClienteDAO::Inserir(Cliente obj){
-    objetos.push_back(obj);   
+    Abrir();
+
+    for(const Cliente& c: objetos){
+        if(c.getId() == obj.getId()){
+            throw invalid_argument("Cliente ja cadastrado no sistema!"); 
+        }
+    }
+
+    objetos.push_back(obj);
+    Salvar();   
 }
 
 vector<Cliente> ClienteDAO::Listar(){
@@ -27,6 +36,7 @@ Cliente ClienteDAO::Listar_Id(int id){
 }
 
 void ClienteDAO::Atualizar(Cliente obj){
+    Abrir();
     for(Cliente& c : objetos){
         
         if(c.getId() == obj.getId()){
@@ -40,6 +50,7 @@ void ClienteDAO::Atualizar(Cliente obj){
 }
 
 void ClienteDAO::Excluir(int id){
+    Abrir();
     for(size_t i = 0; i < objetos.size(); i++){
 
         if(objetos[i].getId() == id){
@@ -56,21 +67,17 @@ void ClienteDAO::Abrir(){
 
         if(!arquivo.is_open()){
             objetos.clear();
-            arquivo.close();
             return;
     }
 
     json dados;
     arquivo >> dados;
     arquivo.close();
-    
     objetos.clear();
 
     for(const auto& item: dados){
         objetos.push_back(Cliente::from_json(item));
     } 
-
-    arquivo.close();
 }
 
 void ClienteDAO::Salvar(){
@@ -87,4 +94,5 @@ if(!arquivo.is_open()){
 }
 
 arquivo << dados.dump(4);
+arquivo.close();
 }

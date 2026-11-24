@@ -2,6 +2,7 @@
 #define VENDA_HPP
 
 #include <chrono>
+#include <format>
 #include <string>
 #include <nlohmann/json.hpp>
 
@@ -25,6 +26,9 @@ class Venda{
 
         void setTotal(double total);
         double getTotal() const;
+
+        void setCarrinho(bool total);
+        bool getCarrinho() const;
 
         void setIdCliente(int id_cliente);
         int getIdCliente() const;

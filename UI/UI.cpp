@@ -3,6 +3,8 @@
 #include "MenuCliente/MenuCliente.hpp"
 #include "MenuVenda/MenuVenda.hpp"
 #include "MenuCategoria/MenuCategoria.hpp"
+#include "MenuProduto/MenuProduto.hpp"
+#include "MenuVendaItem/MenuVendaItem.hpp"
 #include <string>
 
 using namespace std;
@@ -13,6 +15,8 @@ int UI::Menu(){
     cout << "1 - Gerenciar Clientes\n";
     cout << "2 - Gerenciar Vendas\n";
     cout << "3 - Gerenciar Categorias\n";
+    cout << "4 - gerenciar Produtos\n";
+    cout << "5 - gerenciar item de venda\n";
     cout << "0 - Sair\n";
     cout << "Escolha uma opcao: ";
 
@@ -27,7 +31,8 @@ void UI::Main(){
     
     clientedao.Abrir();
     vendadao.Abrir();
-
+    produtoDAO.Abrir();
+    vendaItemDAO.Abrir();
     do{
         opcao = Menu();
 
@@ -36,7 +41,6 @@ void UI::Main(){
             case 1: {
 
                 MenuCliente menuCliente;
-                menuCliente.abrirArquivo();
 
                 int opCliente;
 
@@ -61,7 +65,6 @@ void UI::Main(){
             case 2: {
 
             MenuVenda menuvenda;    
-            menuvenda.abrirArquivo();
 
             int opVenda;
 
@@ -73,8 +76,9 @@ void UI::Main(){
 
                     case 1: menuvenda.venda_Inserir(); break;
                     case 2: menuvenda.venda_Listar(); break;
-                    case 3: menuvenda.venda_Atualizar(); break;
-                    case 4: menuvenda.venda_Excluir(); break;
+                    case 3: menuvenda.venda_ListarId(); break;
+                    case 4: menuvenda.venda_Atualizar(); break;
+                    case 5: menuvenda.venda_Excluir(); break;
                     case 0: break;
                     
                     default: cout << "Opção Invalida!\n";
@@ -85,8 +89,7 @@ void UI::Main(){
 
             case 3: {
 
-            MenuCategoria menuCategoria;    
-            menuCategoria.abrirArquivo();
+            MenuCategoria menuCategoria;
 
             int opCategoria;
 
@@ -106,6 +109,57 @@ void UI::Main(){
                     default: cout << "Opção Invalida!\n";
                   }
                 } while(opCategoria != 0);
+                break;
+            }
+
+            case 4: {
+
+            MenuProduto menuProduto;
+
+            int opProduto;
+
+            do{
+
+                opProduto = menuProduto.menuOpcoesProduto();
+
+                switch(opProduto){
+
+                    case 1: menuProduto.produto_Inserir(); break;
+                    case 2: menuProduto.produto_Listar(); break;
+                    case 3: menuProduto.produto_ListarId(); break;
+                    case 4: menuProduto.produto_Atualizar(); break;
+                    case 5: menuProduto.produto_Excluir(); break;
+                    case 0: break;
+                    
+                    default: cout << "Opção Invalida!\n";
+                  }
+                } while(opProduto != 0);
+                break;
+            }
+
+               case 5: {
+
+            MenuVendaItem menu_vendaItem;    
+            menu_vendaItem.abrirArquivo();
+
+            int opItem;
+
+            do{
+
+                opItem = menu_vendaItem.menuVendaItemOpções();
+
+                switch(opItem){
+
+                    case 1: menu_vendaItem.vendaItem_Inserir(); break;
+                    case 2: menu_vendaItem.vendaItem_Listar(); break;
+                    case 3: menu_vendaItem.vendaItem_ListarId(); break;
+                    case 4: menu_vendaItem.vendaItem_Atualizar(); break;
+                    case 5: menu_vendaItem.vendaItem_Excluir(); break;
+                    case 0: break;
+                    
+                    default: cout << "Opção Invalida!\n";
+                  }
+                } while(opItem != 0);
                 break;
             }
 

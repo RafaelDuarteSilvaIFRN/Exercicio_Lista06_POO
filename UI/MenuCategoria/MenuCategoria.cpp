@@ -18,20 +18,22 @@ int MenuCategoria::menuOpcoesCategoria(){
     return opcao;
 }
 
-void MenuCategoria::abrirArquivo(){
-     categoriadao.Abrir();
-}
-
 void MenuCategoria::categoria_Listar(){
-    vector<Categoria> categorias = categoriadao.Listar();
-    
-    if(categorias.empty()){
-       cout << "Lista vazia!\n"; 
-       return;
-    }
 
-    for(const Categoria& c: categorias){
+    try{
+
+        vector<Categoria> categorias = ServiceCategoria::categoria_listar();
+        
+        if(categorias.empty()){
+        cout << "Lista vazia!\n"; 
+        return;
+        }
+
+        for(const Categoria& c: categorias){
             cout << c.ToString() << "\n\n";
+        } 
+    } catch(const exception& e){
+        cout << "Erro ao listar categorias: " << e.what() << endl;  
     }
 }
 
@@ -42,10 +44,13 @@ void MenuCategoria::categoria_ListarId(){
     cout << "Digite o Id do categoria: ";
     cin >> id;
 
-    Categoria c = categoriadao.Listar_Id(id);
-    cout << "\nCategoria encontrada\n";
-    cout << c.ToString() << "\n";
-
+    try{
+        Categoria c = ServiceCategoria::categoria_listar_id(id);
+        cout << "\nCategoria encontrada\n";
+        cout << c.ToString() << "\n";
+    } catch(const exception& e){
+        cout << "Erro ao buscar categoria: " << e.what() << endl;
+    }
 }
 
 void MenuCategoria::categoria_Inserir(){
@@ -59,11 +64,12 @@ void MenuCategoria::categoria_Inserir(){
     cout << "\nDigite a categoria do produto: ";
     getline(cin, categoria);
 
-    Categoria c(id, categoria);
-    categoriadao.Inserir(c);
-    categoriadao.Salvar();
-
-    cout << "categoria cadastrado com sucesso!\n";
+    try{
+        ServiceCategoria::categoria_inserir(id, categoria);
+        cout << "Categoria cadastrada com sucesso!\n";
+    } catch(const exception& e){
+       cout << "Erro ao cadastrar categoria: " << e.what() << endl; 
+    }
 }
 
 void MenuCategoria::categoria_Atualizar(){
@@ -77,12 +83,13 @@ void MenuCategoria::categoria_Atualizar(){
     cout << "\nAtualiza o seu categoria: ";
     getline(cin, categoria);
 
-    Categoria c(id, categoria);
+    try{
+        ServiceCategoria::categoria_atualizar(id, categoria);
+        cout << "Categoria atualizada com sucesso!\n";
+    } catch(const exception& e){
+       cout << "Erro ao atualizar categoria: " << e.what() << endl; 
+    }
 
-    categoriadao.Atualizar(c);
-    categoriadao.Salvar();
-
-    cout << "\nCategoria atualizado com sucesso!\n";
 }
 
 void MenuCategoria::categoria_Excluir(){
@@ -92,9 +99,11 @@ void MenuCategoria::categoria_Excluir(){
     cin >> id;
     cin.ignore();
 
-    Categoria obj = categoriadao.Listar_Id(id);
-    categoriadao.Excluir(obj.getId());
-    categoriadao.Salvar();
-
-    cout << "categoria excluido com sucesso!\n";
+    try{
+        ServiceCategoria::categoria_excluir(id);
+        cout << "Categoria excluido com sucesso!\n";
+    } catch(const exception& e){
+        cout << "Erro ao excluir categoria: " << e.what() << endl;
+    }
+ 
 }

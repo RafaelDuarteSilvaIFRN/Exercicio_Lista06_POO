@@ -7,7 +7,16 @@
 using json = nlohmann::json;
 
 void CategoriaDAO::Inserir(Categoria obj){
+     Abrir();
+
+    for(const Categoria& c: objetos){
+        if(c.getId() == obj.getId()){
+            throw invalid_argument("Categoria ja cadastrado no sistema!"); 
+        }
+    }
+
     objetos.push_back(obj);   
+    Salvar();  
 }
 
 vector<Categoria> CategoriaDAO::Listar(){

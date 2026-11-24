@@ -7,7 +7,16 @@
 using json = nlohmann::json;
 
 void VendaDAO::Inserir(Venda obj){
+    Abrir();
+
+    for(const Venda& c: objetos){
+        if(c.getId() == obj.getId()){
+            throw invalid_argument("Venda ja cadastrado no sistema!"); 
+        }
+    }
+
     objetos.push_back(obj);   
+    Salvar(); 
 }
 
 vector<Venda> VendaDAO::Listar(){
@@ -27,6 +36,7 @@ Venda VendaDAO::Listar_Id(int id){
 }
 
 void VendaDAO::Atualizar(Venda obj){
+    Abrir();
     for(Venda& c : objetos){
         
         if(c.getId() == obj.getId()){
@@ -40,6 +50,7 @@ void VendaDAO::Atualizar(Venda obj){
 }
 
 void VendaDAO::Excluir(int id){
+    Abrir();
     for(size_t i = 0; i < objetos.size(); i++){
 
         if(objetos[i].getId() == id){
@@ -84,4 +95,5 @@ if(!arquivo.is_open()){
 }
 
 arquivo << dados.dump(4);
+arquivo.close();
 }
