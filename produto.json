@@ -1,0 +1,9 @@
+[
+    {
+        "descricao": "Carro de controle remoto",
+        "estoque": 32,
+        "id": 1,
+        "id_categoria": 1,
+        "preco": 120.0
+    }
+]

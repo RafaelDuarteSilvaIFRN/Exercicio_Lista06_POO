@@ -36,6 +36,7 @@ Categoria CategoriaDAO::Listar_Id(int id){
 }
 
 void CategoriaDAO::Atualizar(Categoria obj){
+    Abrir();
     for(Categoria& c : objetos){
         
         if(c.getId() == obj.getId()){
@@ -49,6 +50,7 @@ void CategoriaDAO::Atualizar(Categoria obj){
 }
 
 void CategoriaDAO::Excluir(int id){
+    Abrir();
     for(size_t i = 0; i < objetos.size(); i++){
 
         if(objetos[i].getId() == id){

@@ -140,7 +140,6 @@ void UI::Main(){
                case 5: {
 
             MenuVendaItem menu_vendaItem;    
-            menu_vendaItem.abrirArquivo();
 
             int opItem;
 

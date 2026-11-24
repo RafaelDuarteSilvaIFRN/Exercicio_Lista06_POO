@@ -91,7 +91,6 @@ void MenuCliente::cliente_Atualizar(){
         email = c.getEmail();
         fone = c.getFone();
 
-
         cout << "Selecione qual item vc deseja atualizar:\n";
         cout << "[1] Nome  [2] Email  [3] Telefone\n";
         cin >> escolher_item;
@@ -99,22 +98,22 @@ void MenuCliente::cliente_Atualizar(){
 
             case 1 : {
                     cout << "\nInforme o nome que vc deseja atualizar: ";
-                    getline(cin, nome);
                     cin.ignore();
+                    getline(cin, nome);
                     break;
-            }
-
-            case 2: {
-                cout << "Informe o email que vc deseja atualizar: ";
-                cin >> email;
-                cin.ignore();
-                break;
+                }
+                
+                case 2: {
+                    cout << "Informe o email que vc deseja atualizar: ";
+                    cin.ignore();
+                    getline(cin, email);
+                    break;
             }
 
             case 3: {
                 cout << "\nInforme o telefone que vc deseja atualizar: ";
-                cin >> fone;
                 cin.ignore();
+                getline(cin, fone);
                 break;
             }
 
